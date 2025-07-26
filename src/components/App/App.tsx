@@ -35,11 +35,14 @@ export default function App() {
     placeholderData: (prevData) => prevData,
   });
 
-  useEffect(() => {
-    if (isSuccess && data.results.length === 0) {
-      toast('Нічого не знайдено за вашим запитом');
-    }
-  }, [isSuccess, data]);
+useEffect(() => {
+  if (isSuccess && data && data.results.length === 0) {
+    toast.error('Нічого не знайдено');
+  }
+}, [isSuccess, data]);
+
+
+
 
   const handleSearch = (newQuery: string) => {
     const trimmed = newQuery.trim();
@@ -54,8 +57,8 @@ export default function App() {
       <Toaster position="top-right" />
       <SearchBar onSubmit={handleSearch} />
       {isLoading && <Loader />}
-      {isError && <ErrorMessage />}
-      {isSuccess && data.results.length === 0 && <p>Нічого не знайдено.</p>}
+    {isError && <ErrorMessage />}
+ 
 
       {isSuccess && data.results.length > 0 && (
         <>
@@ -75,6 +78,8 @@ export default function App() {
           )}
         </>
       )}
+
+      {isSuccess && data.results.length === 0 && <ErrorMessage />}
 
       {selectedMovie && (
         <MovieModal movie={selectedMovie} onClose={() => setSelectedMovie(null)} />
